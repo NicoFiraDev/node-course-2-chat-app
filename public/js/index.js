@@ -10,21 +10,39 @@ socket.on('disconnect', function(){
 
 socket.on('newMessage', function(message){
   var formattedTime = moment(message.createdAt).format('h:mm a'),
-      li = $('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
+      template = $('#message-template').html(),
+      html = Mustache.render(template, {
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
 
-  $('#messages').append(li);
+  $('#messages').append(html);
+  // var formattedTime = moment(message.createdAt).format('h:mm a'),
+  //     li = $('<li></li>');
+  // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  //
+  // $('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function(message){
-  var li = $('<li></li>'),
-      a  = $('<a target="_blank">My current location</a>'),
-      formattedTime = moment(message.createdAt).format('h:mm a');
+  // var li = $('<li></li>'),
+  //     a  = $('<a target="_blank">My current location</a>');
 
-  li.text(`${message.from} ${formattedTime}: `);
-  a.attr('href', message.url);
-  li.append(a);
-  $('#messages').append(li);
+  var formattedTime = moment(message.createdAt).format('h:mm a'),
+      template      = $('#location-message-template').html(),
+      html          = Mustache.render(template, {
+        from: message.from,
+        url: message.url,
+        createdAt: formattedTime
+      });
+
+    $('#messages').append(html);
+
+  // li.text(`${message.from} ${formattedTime}: `);
+  // a.attr('href', message.url);
+  // li.append(a);
+  // $('#messages').append(li);
 });
 
 $('#message-form').on('submit', function(e){
@@ -60,3 +78,7 @@ locationButton.on('click', function(){
     alert('Unable to fetch location.');
   });
 });
+
+// andresdiazbuelvas@gmail.com
+
+// Nombre completo, cc, celular y nivel de ingles y hv.
